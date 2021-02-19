@@ -3,7 +3,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Character from "./components/Character";
-import styles from "./styles.css";
 import styled from "styled-components";
 
 const App = () => {
@@ -23,10 +22,20 @@ const App = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: 1px solid black;
+  `;
+
   return (
     <div className="App">
       <h1 className="Header">Characters</h1>
-      <Character characters={characters} />
+      <Container>
+        <Character characters={characters} />
+      </Container>
     </div>
   );
 };

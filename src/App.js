@@ -6,14 +6,25 @@ import Character from "./components/Character";
 import styled from "styled-components";
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
-
-  // Fetch characters from the API in an effect hook. Remember, anytime you have a
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
-
   const [characters, setCharacters] = useState([]);
+  const [selectChar, setselectChar] = useState(null);
+
+  const clickChar = (postId) => {
+    setCharacters(
+      characters.map((character) => {
+        if (postId === character.name) {
+          setselectChar(character);
+          return character;
+        } else {
+          return character;
+        }
+      })
+    );
+  };
+
+  const reset = () => {
+    setselectChar(null);
+  };
 
   useEffect(() => {
     axios
@@ -30,11 +41,34 @@ const App = () => {
     border: 1px solid black;
   `;
 
+  const CharInfoText = styled.div`
+    width: 50%;
+    color: white;
+    font-size: 25px;
+    align-self: center;
+  `;
+
+  const BackButton = styled.button`
+    width: 50%;
+    align-self: center;
+    height: 50px;
+    background-color: blue;
+  `;
+
   return (
     <div className="App">
-      <h1 className="Header">Characters</h1>
+      <h1 className="Header">{selectChar ? selectChar.name : "Characters"}</h1>
       <Container>
-        <Character characters={characters} />
+        {selectChar ? (
+          <div>
+            {Object.values(selectChar).map((item) => (
+              <CharInfoText>{item}</CharInfoText>
+            ))}
+            <BackButton onClick={() => reset()}> GO BACK </BackButton>
+          </div>
+        ) : (
+          <Character characters={characters} clickChar={clickChar} />
+        )}
       </Container>
     </div>
   );
